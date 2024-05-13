@@ -9,6 +9,8 @@ import com.example.QikServeGroceryStore.services.WiremockService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,7 +36,7 @@ public class ShoppingServiceImpl implements ShoppingService {
             items.add(item);
             totalPrice+= item.getPrice() * quantity;
         }
-        shoppingCart.setTotalPrice(totalPrice);
+        shoppingCart.setTotalPrice(new BigDecimal(totalPrice));
         shoppingCart.setItems(items);
         return applyPromotions(shoppingCart);
     }
@@ -67,8 +69,32 @@ public class ShoppingServiceImpl implements ShoppingService {
                 }
             }
         }
-        Double priceWithPromotion = shoppingCart.getTotalPrice() - discount;
-        shoppingCart.setPriceWithPromotions(priceWithPromotion);
+        Double priceWithPromotion = shoppingCart.getTotalPrice().doubleValue() - discount;
+        shoppingCart.setPriceWithPromotions(new BigDecimal(priceWithPromotion));
+        return formatPrices(shoppingCart);
+    }
+
+    private ShoppingCart formatPrices(ShoppingCart shoppingCart){
+        if(shoppingCart.getTotalPrice()!= null){
+            shoppingCart.setTotalPrice(shoppingCart.getTotalPrice().divide(new BigDecimal(100)));
+            shoppingCart.setTotalPrice(shoppingCart.getTotalPrice().setScale(2, RoundingMode.HALF_EVEN));
+        }
+        if(shoppingCart.getPriceWithPromotions() != null){
+            shoppingCart.setPriceWithPromotions(shoppingCart.getPriceWithPromotions().divide(new BigDecimal(100)));
+            shoppingCart.setPriceWithPromotions(shoppingCart.getPriceWithPromotions().setScale(2, RoundingMode.HALF_EVEN));
+        }
+
+        for (Item item: shoppingCart.getItems()){
+            if(item.getPrice()!= null){
+                item.setPrice(item.getPrice()/100);
+            }
+
+            for(Promotion promotion: item.getPromotions()){
+                if(promotion.getPrice() != null){
+                    promotion.setPrice(promotion.getPrice()/100);
+                }
+            }
+        }
         return shoppingCart;
     }
 

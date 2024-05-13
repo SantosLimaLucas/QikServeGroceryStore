@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface WiremockService {
 
-    public void getProducts();
     public ResponseEntity<Item[]> fetchItemsFromExternalAPI();
     public ResponseEntity<Item> fetchItemFromExternalAPI(String itemId);
 }

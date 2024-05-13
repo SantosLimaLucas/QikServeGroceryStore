@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @AllArgsConstructor
@@ -13,6 +14,6 @@ import java.util.List;
 @Setter
 public class ShoppingCart {
     private List<Item> items;
-    private Double totalPrice;
-    private Double priceWithPromotions;
+    private BigDecimal totalPrice; //price in Dollars
+    private BigDecimal priceWithPromotions; // prince in Dollars
 }

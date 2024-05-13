@@ -21,30 +21,23 @@ public class WiremockServiceImpl implements WiremockService {
         this.restTemplate = restTemplate;
     }
 
-    @Override
-    public void getProducts() {
-        List<Item> items = new ArrayList<>();
-    }
 
     public ResponseEntity<Item[]> fetchItemsFromExternalAPI() {
         ResponseEntity<Item[]> response = restTemplate.getForEntity("http://localhost:8081/products", Item[].class);
         if (response.getStatusCode() == HttpStatus.OK) {
             return response;
         } else {
-            // Handle error appropriately
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     public ResponseEntity<Item> fetchItemFromExternalAPI(String itemId) {
-        ResponseEntity<Item> response = restTemplate. getForEntity("http://localhost:8081/products/" + itemId, Item.class);
+        ResponseEntity<Item> response = restTemplate.getForEntity("http://localhost:8081/products/" + itemId, Item.class);
         if (response.getStatusCode() == HttpStatus.OK) {
             return response;
         } else {
-            // Handle error appropriately
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
 
 }

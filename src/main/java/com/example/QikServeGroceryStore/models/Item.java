@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -18,4 +19,7 @@ public class Item {
     private Integer quantity;
     private List<Promotion> promotions; // Promotion associated with the item, if any
 
+    public Item() {
+
+    }
 }
